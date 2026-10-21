@@ -45,13 +45,14 @@ export function parseWeight(value) {
 export function saveCatch(state, id, input, catchId) {
   const weight = parseWeight(input.weight);
   const species = String(input.species ?? '').trim().slice(0, 80);
+  const place = String(input.place ?? '').trim().slice(0, 160);
   if (catchId) {
-    const record = state.catches.find(c => c.id === catchId && c.variantId === id);
+    const record = state.catches.find(c => c.id === catchId);
     if (!record) throw new Error('Улов не найден');
-    Object.assign(record, { weight, species });
+    Object.assign(record, { variantId: id, weight, species, place });
     return record;
   }
-  const record = { id: uid(), variantId: id, weight, species, date: new Date().toISOString() };
+  const record = { id: uid(), variantId: id, weight, species, place, date: new Date().toISOString() };
   state.catches.push(record);
   return record;
 }
